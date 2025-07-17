@@ -1,19 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import QRCode from "react-qr-code";
+import { useLocation } from "react-router-dom";
 
 function App() {
   const [elementID, setElementID] = useState('');
   const [dmpData, setDmpData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
-  const fetchDMP = async () => {
-    if (!elementID) return;
+  // ✅ Fetch by ID
+  const fetchDMPById = async (id) => {
     setLoading(true);
     setDmpData(null);
 
     try {
-      const res = await fetch(`http://localhost:3000/passport?id=${elementID}`);
+      const res = await fetch(`http://localhost:3000/passport?id=${id}`);
       const json = await res.json();
       setDmpData(json[0]);
     } catch (err) {
@@ -23,10 +25,26 @@ function App() {
     setLoading(false);
   };
 
+  // ✅ Manual fetch (button click)
+  const fetchDMP = () => {
+    if (!elementID) return;
+    fetchDMPById(elementID);
+  };
+
+  // ✅ Auto-fetch on URL load
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const idFromURL = params.get("id");
+    if (idFromURL) {
+      setElementID(idFromURL);
+      fetchDMPById(idFromURL);
+    }
+  }, []);
+
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
       <h1>Material Passport Viewer</h1>
-      
+
       <input
         type="text"
         placeholder="Enter Element ID"
@@ -51,13 +69,12 @@ function App() {
           <p><strong>Lifespan:</strong> {dmpData.Lifespan}</p>
           <p><strong>Recycled Content:</strong> {dmpData["Recycled Content"]}</p>
 
-          {/* ✅ QR Code Block FIXED */}
+          {/* ✅ QR Code */}
           <div style={{ marginTop: '2rem' }}>
             <h4>QR Code for this Material</h4>
             <QRCode
-              value={`http://localhost:5173?id=${dmpData["Element ID"]}`} 
-              size={180}
-              includeMargin={true}
+              value={`https://dmp-viewer.vercel.app?id=${dmpData["Element ID"]}`}
+              style={{ height: 180, width: 180 }}
             />
           </div>
         </div>
