@@ -82,19 +82,22 @@ function App() {
             </div>
             <br />
             <button
-              onClick={() => {
-                if (!qrRef.current) return;
-                toPng(qrRef.current).then((dataUrl) => {
-                  const link = document.createElement("a");
-                  link.download = `QR-${dmpData["Element ID"]}.png`;
-                  link.href = dataUrl;
-                  link.click();
-                });
-              }}
-              style={{ marginTop: '10px' }}
-            >
-              Download QR Code
-            </button>
+  onClick={async () => {
+    if (!qrRef.current) return;
+
+    const { toPng } = await import("html-to-image"); // dynamic import here
+
+    toPng(qrRef.current).then((dataUrl) => {
+      const link = document.createElement("a");
+      link.download = `QR-${dmpData["Element ID"]}.png`;
+      link.href = dataUrl;
+      link.click();
+    });
+  }}
+  style={{ marginTop: '10px' }}
+>
+  Download QR Code
+</button>
           </div>
         </div>
       )}
