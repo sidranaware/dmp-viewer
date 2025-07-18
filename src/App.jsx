@@ -42,7 +42,7 @@ function App() {
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
-      <h1><strong>Material Passport Viewer app</strong></h1>
+      <h1><strong>Material Passport Viewer</strong></h1>
 
       <input
         type="text"
@@ -59,7 +59,7 @@ function App() {
 
       {dmpData && (
         <div style={{ marginTop: '2rem', border: '1px solid #ccc', padding: '1rem' }}>
-          <h3>DMP for Element ID: {dmpData["Element ID"]}</h3>
+          <h3>DMP for Element ID : {dmpData["Element ID"]}</h3>
           <p><strong>Type:</strong> {dmpData.Type}</p>
           <p><strong>Volume:</strong> {dmpData.Volume}</p>
           <p><strong>Manufacturer:</strong> {dmpData.Manufacturer}</p>
