@@ -35,6 +35,8 @@ function AddMaterial({ onBack }) {
     setSuccess('');
 
     try {
+      console.log("Submitting form data:", formData);
+
       // Prepare data for blockchain
       const materialData = {
         elementId: formData.elementId,
@@ -51,21 +53,37 @@ function AddMaterial({ onBack }) {
         exchangeId: formData.exchangeId
       };
 
-      // Call your backend API to add to blockchain
-      const response = await fetch('https://dmp-backend-gcoq.onrender.com/add-material', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(materialData)
-      });
+      console.log("Sending to backend:", materialData);
 
-      if (!response.ok) {
-        throw new Error('Failed to add material to blockchain');
+      // Try localhost first, then fallback to deployed backend
+      let response;
+      try {
+        response = await fetch('http://localhost:3000/add-material', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(materialData)
+        });
+      } catch (localError) {
+        console.log("Local server not available, trying deployed backend...");
+        response = await fetch('https://dmp-backend-gcoq.onrender.com/add-material', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(materialData)
+        });
       }
 
       const result = await response.json();
-      setSuccess(`✅ Material added successfully! Element ID: ${formData.elementId}`);
+      
+      if (!response.ok) {
+        throw new Error(result.details || result.error || 'Failed to add material to blockchain');
+      }
+
+      console.log("Success response:", result);
+      setSuccess(`✅ Material added successfully! Element ID: ${formData.elementId}\nTransaction: ${result.transactionHash}`);
       
       // Reset form
       setFormData({
@@ -84,6 +102,7 @@ function AddMaterial({ onBack }) {
       });
 
     } catch (err) {
+      console.error("Error submitting form:", err);
       setError(`❌ Error: ${err.message}`);
     }
 
@@ -343,7 +362,7 @@ function AddMaterial({ onBack }) {
           </div>
 
           {error && <div className="error-message">{error}</div>}
-          {success && <div className="success-message">{success}</div>}
+          {success && <div className="success-message" style={{whiteSpace: 'pre-line'}}>{success}</div>}
 
           <div className="form-summary">
             <h3>📋 Form Summary</h3>
