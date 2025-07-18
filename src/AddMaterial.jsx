@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './AddMaterial.css';
 
-function AddMaterial() {
+function AddMaterial({ onBack }) {
   const [formData, setFormData] = useState({
     elementId: '',
     type: '',
@@ -103,6 +103,11 @@ function AddMaterial() {
     <div className="add-material-container">
       <div className="add-material-card">
         <div className="card-header">
+          {onBack && (
+            <button onClick={onBack} className="back-btn">
+              ← Back to Viewer
+            </button>
+          )}
           <h2>🏗️ Add New Material to Blockchain</h2>
           <p>Create a new digital material passport</p>
         </div>

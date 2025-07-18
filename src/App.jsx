@@ -3,8 +3,10 @@ import './App.css';
 import QRCode from "react-qr-code";
 import { useLocation } from "react-router-dom";
 import { toPng } from 'html-to-image';
+import AddMaterial from './AddMaterial';
 
 function App() {
+  const [currentView, setCurrentView] = useState('viewer'); // 'viewer' or 'add'
   const [elementID, setElementID] = useState('');
   const [dmpData, setDmpData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -76,11 +78,34 @@ function App() {
     if (idFromURL) {
       setElementID(idFromURL);
       fetchDMPById(idFromURL);
+      setCurrentView('viewer'); // Ensure we're on viewer when accessing via QR
     }
   }, []);
 
+  // If AddMaterial view is selected, render AddMaterial component
+  if (currentView === 'add') {
+    return <AddMaterial onBack={() => setCurrentView('viewer')} />;
+  }
+
+  // Main App (Viewer) Component
   return (
     <div className="app-container">
+      {/* Navigation */}
+      <nav className="navigation">
+        <button 
+          onClick={() => setCurrentView('viewer')} 
+          className={currentView === 'viewer' ? 'nav-btn active' : 'nav-btn'}
+        >
+          🔍 View Passport
+        </button>
+        <button 
+          onClick={() => setCurrentView('add')} 
+          className={currentView === 'add' ? 'nav-btn active' : 'nav-btn'}
+        >
+          ➕ Add Material
+        </button>
+      </nav>
+
       {/* Header */}
       <header className="header">
         <div className="header-content">
