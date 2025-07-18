@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import QRCode from "react-qr-code";
 import { useLocation } from "react-router-dom";
+import { toPng } from 'html-to-image';
 
 function App() {
   const [elementID, setElementID] = useState('');
   const [dmpData, setDmpData] = useState(null);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
+  const qrRef = useRef(null); // ✅ For QR download
 
-  // ✅ Fetch by ID
   const fetchDMPById = async (id) => {
     setLoading(true);
     setDmpData(null);
@@ -25,13 +26,11 @@ function App() {
     setLoading(false);
   };
 
-  // ✅ Manual fetch (button click)
   const fetchDMP = () => {
     if (!elementID) return;
     fetchDMPById(elementID);
   };
 
-  // ✅ Auto-fetch on URL load
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const idFromURL = params.get("id");
@@ -43,7 +42,7 @@ function App() {
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
-      <h1>Material Passport Viewer</h1>
+      <h1><strong>Material Passport Viewer app</strong></h1>
 
       <input
         type="text"
@@ -72,10 +71,30 @@ function App() {
           {/* ✅ QR Code */}
           <div style={{ marginTop: '2rem' }}>
             <h4>QR Code for this Material</h4>
-            <QRCode
-              value={`https://dmp-viewer.vercel.app?id=${dmpData["Element ID"]}`}
-              style={{ height: 180, width: 180 }}
-            />
+            <div
+              ref={qrRef}
+              style={{ background: 'white', padding: '16px', display: 'inline-block' }}
+            >
+              <QRCode
+                value={`https://dmp-viewer.vercel.app?id=${dmpData["Element ID"]}`}
+                style={{ height: 180, width: 180 }}
+              />
+            </div>
+            <br />
+            <button
+              onClick={() => {
+                if (!qrRef.current) return;
+                toPng(qrRef.current).then((dataUrl) => {
+                  const link = document.createElement("a");
+                  link.download = `QR-${dmpData["Element ID"]}.png`;
+                  link.href = dataUrl;
+                  link.click();
+                });
+              }}
+              style={{ marginTop: '10px' }}
+            >
+              Download QR Code
+            </button>
           </div>
         </div>
       )}
