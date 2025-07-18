@@ -28,15 +28,6 @@ function AddMaterial({ onBack }) {
     }));
   };
 
-  const generateElementId = () => {
-    // Generate a random 6-digit ID starting with 57
-    const randomId = Math.floor(Math.random() * 10000) + 570000;
-    setFormData(prev => ({
-      ...prev,
-      elementId: randomId.toString()
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -109,32 +100,32 @@ function AddMaterial({ onBack }) {
             </button>
           )}
           <h2>🏗️ Add New Material to Blockchain</h2>
-          <p>Create a new digital material passport</p>
+          <p>Enter unique Element ID from your app and fill material details</p>
         </div>
 
         <form onSubmit={handleSubmit} className="material-form">
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="elementId">Element ID</label>
-              <div className="input-with-button">
-                <input
-                  type="text"
-                  id="elementId"
-                  name="elementId"
-                  value={formData.elementId}
-                  onChange={handleInputChange}
-                  placeholder="e.g., 579024"
-                  required
-                  className="form-input"
-                />
-                <button type="button" onClick={generateElementId} className="generate-btn">
-                  🎲 Generate
-                </button>
-              </div>
+              <label htmlFor="elementId">Element ID *</label>
+              <input
+                type="text"
+                id="elementId"
+                name="elementId"
+                value={formData.elementId}
+                onChange={handleInputChange}
+                placeholder="Enter unique Element ID from your app"
+                required
+                className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
+              />
+              <small className="field-preview">Current: {formData.elementId || 'Not entered'}</small>
             </div>
 
             <div className="form-group">
-              <label htmlFor="type">Type</label>
+              <label htmlFor="type">Type *</label>
               <input
                 type="text"
                 id="type"
@@ -144,13 +135,18 @@ function AddMaterial({ onBack }) {
                 placeholder="e.g., 12 x 24"
                 required
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.type || 'Not entered'}</small>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="volume">Volume</label>
+              <label htmlFor="volume">Volume *</label>
               <input
                 type="text"
                 id="volume"
@@ -160,7 +156,12 @@ function AddMaterial({ onBack }) {
                 placeholder="e.g., 17.00 CF"
                 required
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.volume || 'Not entered'}</small>
             </div>
 
             <div className="form-group">
@@ -173,13 +174,18 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="e.g., 150 kg"
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.weight || 'Not entered'}</small>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="manufacturer">Manufacturer</label>
+              <label htmlFor="manufacturer">Manufacturer *</label>
               <input
                 type="text"
                 id="manufacturer"
@@ -189,11 +195,16 @@ function AddMaterial({ onBack }) {
                 placeholder="e.g., Tata Steel UK"
                 required
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.manufacturer || 'Not entered'}</small>
             </div>
 
             <div className="form-group">
-              <label htmlFor="materialOrigin">Material Origin</label>
+              <label htmlFor="materialOrigin">Material Origin *</label>
               <input
                 type="text"
                 id="materialOrigin"
@@ -203,13 +214,18 @@ function AddMaterial({ onBack }) {
                 placeholder="e.g., Port Talbot Mill"
                 required
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.materialOrigin || 'Not entered'}</small>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="embodiedCarbon">Embodied Carbon (kgCO₂e/kg)</label>
+              <label htmlFor="embodiedCarbon">Embodied Carbon (kgCO₂e/kg) *</label>
               <input
                 type="number"
                 step="0.1"
@@ -220,11 +236,16 @@ function AddMaterial({ onBack }) {
                 placeholder="e.g., 2.6"
                 required
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.embodiedCarbon || 'Not entered'}</small>
             </div>
 
             <div className="form-group">
-              <label htmlFor="recycledContent">Recycled Content (%)</label>
+              <label htmlFor="recycledContent">Recycled Content (%) *</label>
               <input
                 type="number"
                 min="0"
@@ -236,13 +257,18 @@ function AddMaterial({ onBack }) {
                 placeholder="e.g., 45"
                 required
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.recycledContent || 'Not entered'}%</small>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="lifespan">Estimated Lifespan (years)</label>
+              <label htmlFor="lifespan">Estimated Lifespan (years) *</label>
               <input
                 type="number"
                 id="lifespan"
@@ -252,7 +278,12 @@ function AddMaterial({ onBack }) {
                 placeholder="e.g., 60"
                 required
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.lifespan || 'Not entered'} years</small>
             </div>
 
             <div className="form-group">
@@ -265,7 +296,12 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="e.g., Class A"
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.fireRating || 'Not entered'}</small>
             </div>
           </div>
 
@@ -279,7 +315,12 @@ function AddMaterial({ onBack }) {
                 value={formData.installationDate}
                 onChange={handleInputChange}
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.installationDate || 'Not set'}</small>
             </div>
 
             <div className="form-group">
@@ -292,12 +333,27 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="Optional"
                 className="form-input"
+                style={{
+                  color: '#333333',
+                  backgroundColor: '#ffffff'
+                }}
               />
+              <small className="field-preview">Current: {formData.exchangeId || 'Not entered'}</small>
             </div>
           </div>
 
           {error && <div className="error-message">{error}</div>}
           {success && <div className="success-message">{success}</div>}
+
+          <div className="form-summary">
+            <h3>📋 Form Summary</h3>
+            <div className="summary-grid">
+              <p><strong>Element ID:</strong> {formData.elementId || '❌ Required'}</p>
+              <p><strong>Type:</strong> {formData.type || '❌ Required'}</p>
+              <p><strong>Volume:</strong> {formData.volume || '❌ Required'}</p>
+              <p><strong>Manufacturer:</strong> {formData.manufacturer || '❌ Required'}</p>
+            </div>
+          </div>
 
           <button type="submit" disabled={loading} className="submit-btn">
             {loading ? '🔄 Adding to Blockchain...' : '🚀 Add Material to Blockchain'}
