@@ -73,7 +73,7 @@ function App() {
           <div style={{ marginTop: '2rem' }}>
             <h4>QR Code for this Material</h4>
             <QRCode
-              value={`https://dmp-backend-gcoq.onrender.com/passport?id=${dmpData["Element ID"]}`}
+              value={`https://dmp-viewer.vercel.app?id=${dmpData["Element ID"]}`}
               style={{ height: 180, width: 180 }}
             />
           </div>
