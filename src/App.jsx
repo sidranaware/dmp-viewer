@@ -133,70 +133,58 @@ function App() {
             <div className="material-info">
               <div className="info-grid">
                 <div className="info-item">
-                  <span className="label">Type</span>
+                  <span className="label">🏷️ Type</span>
                   <span className="value">{dmpData.Type || 'N/A'}</span>
                 </div>
                 <div className="info-item">
-                  <span className="label">Volume</span>
+                  <span className="label">📦 Volume</span>
                   <span className="value">{dmpData.Volume || 'N/A'}</span>
                 </div>
                 <div className="info-item">
-                  <span className="label">Manufacturer</span>
+                  <span className="label">🏭 Manufacturer</span>
                   <span className="value">{dmpData.Manufacturer || 'N/A'}</span>
                 </div>
                 <div className="info-item">
-                  <span className="label">Material Origin</span>
+                  <span className="label">🌍 Origin</span>
                   <span className="value">{dmpData["Material Origin"] || 'N/A'}</span>
                 </div>
                 <div className="info-item">
-                  <span className="label">Embodied Carbon</span>
+                  <span className="label">🌱 Carbon</span>
                   <span className="value">{dmpData["Embodied Carbon"] ? `${dmpData["Embodied Carbon"]} kgCO₂e/kg` : 'N/A'}</span>
                 </div>
                 <div className="info-item">
-                  <span className="label">Lifespan</span>
+                  <span className="label">⏳ Lifespan</span>
                   <span className="value">{dmpData.Lifespan ? `${dmpData.Lifespan} years` : 'N/A'}</span>
                 </div>
                 <div className="info-item">
-                  <span className="label">Recycled Content</span>
+                  <span className="label">♻️ Recycled</span>
                   <span className="value">{dmpData["Recycled Content"] ? `${dmpData["Recycled Content"]}%` : 'N/A'}</span>
                 </div>
                 <div className="info-item">
-                  <span className="label">Fire Rating</span>
+                  <span className="label">🔥 Fire Rating</span>
                   <span className="value">{dmpData["Fire Rating"] || 'N/A'}</span>
                 </div>
-                <div className="info-item">
-                  <span className="label">Installation Date</span>
-                  <span className="value">{dmpData["Installation Date"] || 'N/A'}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label">Weight</span>
-                  <span className="value">{dmpData.Weight || 'N/A'}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label">Exchange ID</span>
-                  <span className="value">{dmpData["Exchange ID"] || 'N/A'}</span>
-                </div>
                 <div className="info-item full-width">
-                  <span className="label">Owner Address</span>
-                  <span className="value owner-address">{dmpData.Owner || 'N/A'}</span>
+                  <span className="label">👤 Owner</span>
+                  <span className="value owner-address">{dmpData.Owner ? `${dmpData.Owner.slice(0, 6)}...${dmpData.Owner.slice(-4)}` : 'N/A'}</span>
                 </div>
               </div>
             </div>
 
             {/* QR Code Section */}
             <div className="qr-section">
-              <h3>Share This Material Passport</h3>
+              <h3>📱 Share Material Passport</h3>
               <div className="qr-container">
                 <div ref={qrRef} className="qr-code-wrapper">
                   <QRCode
                     value={`https://dmp-viewer.vercel.app?id=${dmpData["Element ID"]}`}
-                    size={200}
+                    size={150}
                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                     viewBox={`0 0 256 256`}
                   />
                 </div>
                 <button onClick={downloadQR} className="download-button">
-                  📥 Download QR Code
+                  📥 Download QR
                 </button>
               </div>
             </div>
@@ -206,7 +194,7 @@ function App() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>Powered by Blockchain Technology | Secure • Transparent • Immutable</p>
+        <p>Powered by Blockchain • Secure • Transparent</p>
       </footer>
     </div>
   );
