@@ -74,7 +74,7 @@ function AddMaterial({ onBack }) {
       }
 
       const result = await response.json();
-      setSuccess(`Material added successfully! Element ID: ${formData.elementId}`);
+      setSuccess(`✅ Material added successfully! Element ID: ${formData.elementId}`);
       
       // Reset form
       setFormData({
@@ -93,7 +93,7 @@ function AddMaterial({ onBack }) {
       });
 
     } catch (err) {
-      setError(`Error: ${err.message}`);
+      setError(`❌ Error: ${err.message}`);
     }
 
     setLoading(false);
@@ -125,6 +125,7 @@ function AddMaterial({ onBack }) {
                   onChange={handleInputChange}
                   placeholder="e.g., 579024"
                   required
+                  className="form-input"
                 />
                 <button type="button" onClick={generateElementId} className="generate-btn">
                   🎲 Generate
@@ -142,6 +143,7 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="e.g., 12 x 24"
                 required
+                className="form-input"
               />
             </div>
           </div>
@@ -157,6 +159,7 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="e.g., 17.00 CF"
                 required
+                className="form-input"
               />
             </div>
 
@@ -169,6 +172,7 @@ function AddMaterial({ onBack }) {
                 value={formData.weight}
                 onChange={handleInputChange}
                 placeholder="e.g., 150 kg"
+                className="form-input"
               />
             </div>
           </div>
@@ -184,6 +188,7 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="e.g., Tata Steel UK"
                 required
+                className="form-input"
               />
             </div>
 
@@ -197,6 +202,7 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="e.g., Port Talbot Mill"
                 required
+                className="form-input"
               />
             </div>
           </div>
@@ -213,6 +219,7 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="e.g., 2.6"
                 required
+                className="form-input"
               />
             </div>
 
@@ -228,6 +235,7 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="e.g., 45"
                 required
+                className="form-input"
               />
             </div>
           </div>
@@ -243,6 +251,7 @@ function AddMaterial({ onBack }) {
                 onChange={handleInputChange}
                 placeholder="e.g., 60"
                 required
+                className="form-input"
               />
             </div>
 
@@ -255,6 +264,7 @@ function AddMaterial({ onBack }) {
                 value={formData.fireRating}
                 onChange={handleInputChange}
                 placeholder="e.g., Class A"
+                className="form-input"
               />
             </div>
           </div>
@@ -268,6 +278,7 @@ function AddMaterial({ onBack }) {
                 name="installationDate"
                 value={formData.installationDate}
                 onChange={handleInputChange}
+                className="form-input"
               />
             </div>
 
@@ -280,6 +291,7 @@ function AddMaterial({ onBack }) {
                 value={formData.exchangeId}
                 onChange={handleInputChange}
                 placeholder="Optional"
+                className="form-input"
               />
             </div>
           </div>
