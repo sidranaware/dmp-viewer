@@ -3,17 +3,23 @@ import './AddMaterial.css';
 
 function AddMaterial({ onBack }) {
   const [formData, setFormData] = useState({
-    elementId: '',
-    type: '',
-    volume: '',
-    materialOrigin: '',
-    embodiedCarbon: '',
-    lifespan: '',
-    fireRating: '',
-    installationDate: '',
+    productID: '',
+    Type: '',
+    volume_m3: '',
+    mass_kg: '',
+    density_kg_m3: '',
+    recycledContent_percent: '',
+    embodiedCarbon_kgCO2e_per_kg: '',
+    totalEmbodiedCarbon_kgCO2e: '',
+    declarationOfConformity: '',
+    technicalDocumentation: '',
+    materialComposition: '',
+    reuseStatus: '',
+    recyclabilityStatus: '',
+    endOfLifeInstructions: '',
+    uniqueFacilityID: '',
+    timestamp: '',
     manufacturer: '',
-    recycledContent: '',
-    weight: '',
     exchangeId: ''
   });
   const [loading, setLoading] = useState(false);
@@ -37,19 +43,13 @@ function AddMaterial({ onBack }) {
     try {
       console.log("Submitting form data:", formData);
 
-      // Prepare data for blockchain
+      // Prepare data for backend / local JSON format
       const materialData = {
-        elementId: formData.elementId,
-        type: formData.type,
-        volume: formData.volume,
-        materialOrigin: formData.materialOrigin,
-        embodiedCarbon: formData.embodiedCarbon,
-        lifespan: formData.lifespan,
-        fireRating: formData.fireRating,
-        installationDate: formData.installationDate,
-        manufacturer: formData.manufacturer,
-        recycledContent: formData.recycledContent,
-        weight: formData.weight,
+        productID: formData.productID ? (isNaN(Number(formData.productID)) ? formData.productID : Number(formData.productID)) : undefined,
+        Type: formData.Type,
+        volume_m3: formData.volume_m3 ? Number(formData.volume_m3) : undefined,
+        mass_kg: formData.mass_kg ? Number(formData.mass_kg) : undefined,
+        density_kg_m3: formData.density_kg_m3 ? Number(formData.density_kg_m3) : undefined,
         exchangeId: formData.exchangeId
       };
 
