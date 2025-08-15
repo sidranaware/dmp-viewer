@@ -1,8 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import QRCode from "react-qr-code";
 import { useLocation } from "react-router-dom";
-import { toPng } from 'html-to-image';
 import AddMaterial from './AddMaterial';
 
 function App() {
@@ -14,29 +12,32 @@ function App() {
   const location = useLocation();
   const qrRef = useRef(null);
 
+  // Fetch from local public/dmp-data.json and find matching elementID
   const fetchDMPById = async (id) => {
     setLoading(true);
     setDmpData(null);
     setError('');
 
     try {
-      const res = await fetch(`https://dmp-backend-gcoq.onrender.com/passport?id=${id}`);
-      
-      if (!res.ok) {
-        throw new Error(`Error: ${res.status} - ${res.statusText}`);
-      }
-      
-      const json = await res.json();
-      if (json && json.length > 0) {
-        setDmpData(json[0]);
+      const res = await fetch('/dmp-data.json');
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      const list = await res.json();
+      // Normalize id to string for matching
+      const idStr = String(id).trim();
+      const found = Array.isArray(list)
+        ? list.find(item => String(item.elementID) === idStr || String(item.elementId) === idStr)
+        : null;
+
+      if (found) {
+        setDmpData(found);
       } else {
         setError('No data found for this Element ID');
       }
     } catch (err) {
-      setError(`Failed to fetch data: ${err.message}`);
+      setError(`Failed to load data: ${err.message}`);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const fetchDMP = () => {
@@ -53,34 +54,31 @@ function App() {
     }
   };
 
+  // Download QR by converting the qrRef DOM node to PNG using dynamic import
   const downloadQR = async () => {
-    if (!qrRef.current) return;
+    if (!qrRef.current || !dmpData) return;
 
     try {
-      const { toPng } = await import("html-to-image");
-      const dataUrl = await toPng(qrRef.current, {
-        quality: 1.0,
-        pixelRatio: 2,
-      });
-      
-      const link = document.createElement("a");
-      link.download = `Material-Passport-QR-${dmpData["Element ID"]}.png`;
+      const { toPng } = await import('html-to-image');
+      const dataUrl = await toPng(qrRef.current, { quality: 1.0, pixelRatio: 2 });
+      const link = document.createElement('a');
+      link.download = `Material-Passport-QR-${dmpData.elementID || dmpData.elementId}.png`;
       link.href = dataUrl;
       link.click();
-    } catch (error) {
+    } catch (err) {
       alert('Failed to download QR code');
     }
   };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const idFromURL = params.get("id");
+    const idFromURL = params.get('id');
     if (idFromURL) {
       setElementID(idFromURL);
       fetchDMPById(idFromURL);
       setCurrentView('viewer'); // Ensure we're on viewer when accessing via QR
     }
-  }, []);
+  }, [location.search]);
 
   // If AddMaterial view is selected, render AddMaterial component
   if (currentView === 'add') {
@@ -152,46 +150,38 @@ function App() {
           <div className="material-card">
             <div className="card-header">
               <h2>Material Passport</h2>
-              <span className="element-id">ID: {dmpData["Element ID"]}</span>
+              <span className="element-id">ID: {dmpData.elementID || dmpData.elementId}</span>
             </div>
 
             <div className="material-info">
               <div className="info-grid">
                 <div className="info-item">
                   <span className="label">🏷️ Type</span>
-                  <span className="value">{dmpData.Type || 'N/A'}</span>
+                  <span className="value">{dmpData.type || 'N/A'}</span>
                 </div>
                 <div className="info-item">
                   <span className="label">📦 Volume</span>
-                  <span className="value">{dmpData.Volume || 'N/A'}</span>
+                  <span className="value">{dmpData.volume_m3 != null ? `${dmpData.volume_m3} m³` : 'N/A'}</span>
                 </div>
                 <div className="info-item">
                   <span className="label">🏭 Manufacturer</span>
-                  <span className="value">{dmpData.Manufacturer || 'N/A'}</span>
+                  <span className="value">{dmpData.manufacturer || 'N/A'}</span>
                 </div>
                 <div className="info-item">
-                  <span className="label">🌍 Origin</span>
-                  <span className="value">{dmpData["Material Origin"] || 'N/A'}</span>
+                  <span className="label">📐 Density</span>
+                  <span className="value">{dmpData.density_kg_m3 != null ? `${dmpData.density_kg_m3} kg/m³` : 'N/A'}</span>
                 </div>
                 <div className="info-item">
-                  <span className="label">🌱 Carbon</span>
-                  <span className="value">{dmpData["Embodied Carbon"] ? `${dmpData["Embodied Carbon"]} kgCO₂e/kg` : 'N/A'}</span>
+                  <span className="label">🌱 Recycled</span>
+                  <span className="value">{dmpData.recycledContent_percent != null ? `${dmpData.recycledContent_percent}%` : 'N/A'}</span>
                 </div>
                 <div className="info-item">
                   <span className="label">⏳ Lifespan</span>
-                  <span className="value">{dmpData.Lifespan ? `${dmpData.Lifespan} years` : 'N/A'}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label">♻️ Recycled</span>
-                  <span className="value">{dmpData["Recycled Content"] ? `${dmpData["Recycled Content"]}%` : 'N/A'}</span>
-                </div>
-                <div className="info-item">
-                  <span className="label">🔥 Fire Rating</span>
-                  <span className="value">{dmpData["Fire Rating"] || 'N/A'}</span>
+                  <span className="value">{dmpData.expectedServiceLife_years ? `${dmpData.expectedServiceLife_years} years` : 'N/A'}</span>
                 </div>
                 <div className="info-item full-width">
                   <span className="label">👤 Owner</span>
-                  <span className="value owner-address">{dmpData.Owner ? `${dmpData.Owner.slice(0, 6)}...${dmpData.Owner.slice(-4)}` : 'N/A'}</span>
+                  <span className="value owner-address">{dmpData.owner ? `${dmpData.owner.slice(0,6)}...${dmpData.owner.slice(-4)}` : 'N/A'}</span>
                 </div>
               </div>
             </div>
@@ -202,7 +192,7 @@ function App() {
               <div className="qr-container">
                 <div ref={qrRef} className="qr-code-wrapper">
                   <QRCode
-                    value={`https://dmp-viewer.vercel.app?id=${dmpData["Element ID"]}`}
+                    value={`https://dmp-viewer.vercel.app?id=${dmpData.elementID || dmpData.elementId}`}
                     size={150}
                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                     viewBox={`0 0 256 256`}
