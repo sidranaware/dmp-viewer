@@ -118,7 +118,7 @@ function App() {
       <header className="header">
         <div className="header-content">
           <h1 className="title">🏗️ Digital Material Passport</h1>
-          <p className="subtitle">Material traceability (local JSON)</p>
+          <p className="subtitle">Material traceability</p>
         </div>
       </header>
 
@@ -280,7 +280,7 @@ function App() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>Digital Material Passport • Local JSON data</p>
+        <p>Digital Material Passport</p>
       </footer>
     </div>
   );
